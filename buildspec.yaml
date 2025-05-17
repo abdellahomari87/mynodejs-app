@@ -1,19 +1,16 @@
 version: 0.2
 
-phases: 
-    install:
-        runtime-versions:
-            nodejs: latest
-        commands:
-            - echo "installing something"
-    pre_build:
-        commands: 
-            - echo "we are in the pre build phase"
-    build:
-        commands:
-            - echo "we are in the build block"
-            - echo "we will run some tests"
-            - grep -Fq "Congratulations" index.html
-    post_build:
-        commands:
-            - echo "we are in the post build phase"
+phases:
+  pre_build:
+    commands:
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin 600897147573.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
+  build:
+    commands:
+      - docker build -t my-app:latest .
+      - docker tag 600897147573.dkr.ecr.us-east-1.amazonaws.com/my-app/latest
+  post_build:
+    commands:
+      - docker push 600897147573.dkr.ecr.us-east-1.amazonaws.com/my-app/latest
+      - printf '[{"name":"my-app","imageUri":"%s"}]' 600897147573.dkr.ecr.us-east-1.amazonaws.com/my-app/latest > imagedefinitions.json
+artifacts:
+  files: imagedefinitions.json
