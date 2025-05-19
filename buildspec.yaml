@@ -18,3 +18,9 @@ phases:
       - echo Build completed on `date`
       - echo Pushing the Docker image...
       - docker push 600897147573.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/my-app:latest
+      - echo Writing imagedefinitions.json file...
+      - printf '[{"name":"my-app","imageUri":"%s"}]' 600897147573.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/my-app:latest > imagedefinitions.json
+
+artifacts:
+  files:
+    - imagedefinitions.json
