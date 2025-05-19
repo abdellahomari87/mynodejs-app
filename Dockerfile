@@ -1,5 +1,5 @@
 # Étape 1 : Image de base officielle
-FROM node:18
+FROM public.ecr.aws/docker/library/node:18
 
 # Étape 2 : Créer le répertoire de travail
 WORKDIR /usr/src/app
